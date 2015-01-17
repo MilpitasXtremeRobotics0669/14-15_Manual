@@ -1,5 +1,4 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  none,     none)
-#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Motor,  motorA,           ,             tmotorNXT, openLoop)
 #pragma config(Motor,  motorB,           ,             tmotorNXT, openLoop)
 #pragma config(Motor,  motorC,           ,             tmotorNXT, openLoop)
@@ -75,6 +74,7 @@ task main()
 {
 	initializeRobot();
 
+	//Comment out for tests
 	//waitForStart();
 
 	///////////////////////////////////////////////////////////
@@ -130,8 +130,14 @@ task main()
 			//Get the Latest joystick values
 			getJoystickSettings(joystick);
 
-			//Driving Control
-			if(abs(joystick.joy1_y1) > threshold)     // If the right analog stick's Y-axis readings are either above or below the threshold...
+			//Operator Control Joy 2
+			/*
+				!! D-Pad Up and Down ... Raise and Lower
+				!! 2 Buttons (4,2?) ... Capture and Release
+			*/
+
+			//Driving Control Joy 1
+			if(abs(joystick.joy1_y1) > threshold)     // If the abs. value of the right analog stick's Y-axis readings are above the threshold...
 			{
 				motor[frontLeft] = joystick.joy1_y1;				// ...move the right side of the robot.
 			}
@@ -139,16 +145,16 @@ task main()
 			{
 				motor[frontLeft] = 0;											// ...stop the right side of the robot.
 			}
-			if(abs(joystick.joy1_y2) > threshold)     // If the left analog stick's Y-axis readings are either above or below the threshold...
+			//---
+			if(abs(joystick.joy1_y2) > threshold)     // If the abs. value of the left analog stick's Y-axis readings are above the threshold...
 			{
 				motor[frontRight] = joystick.joy1_y2;				// ...move the left side of the robot.
-				motor[backRight] = joystick.joy1_y2;
 			}
 			else                                      // Else the readings are within the threshold, so...
 			{
 				motor[frontRight] = 0;											// ...stop the left side of the robot.
-				motor[backRight] = 0;
 			}
+			//---
 			if(abs(joystick.joy1_y1) > threshold)
 			{
 				motor[backLeft] = joystick.joy1_y1;
@@ -157,6 +163,7 @@ task main()
 			{
 				motor[backLeft] = 0;
 			}
+			//---
 			if(abs(joystick.joy1_y2) > threshold)
 			{
 				motor[backRight] = joystick.joy1_y2;
@@ -165,6 +172,7 @@ task main()
 			{
 				motor[backRight] = 0;
 			}
+
 		}
 	}
 }
